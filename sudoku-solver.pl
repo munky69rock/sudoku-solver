@@ -102,6 +102,7 @@ use warnings;
 			$view .= "\n" . ($ln % 3 == 0 ? $devider : $devider2);
 		}
 		print $view;
+		return;
 	}
 
 	1;
@@ -200,26 +201,25 @@ use warnings;
 
 	sub solve {
 		my $self = shift;
-		$self->solve_one;
-		for my $n (2 .. $Sudoku::COLUMN_NUM) {
+		for my $n (1 .. $Sudoku::COLUMN_NUM) {
 			my $i = 0;
 			for my $coord (@{$self->blank_coord}) {
 				my $exp = $self->expected_values($coord);
 				if (@$exp == $n) {
 					for my $e (@$exp) {
-						my $clone = $self->clone;
+						my $sudoku = $n == 1 ? $self : $self->clone;
 						my $solved = 0;
 						eval {
-							$clone->value($coord->x, $coord->y, $e);
-							$clone->solve_one;
-							unless (@{$clone->blank_coord}) {
+							$sudoku->value($coord->x, $coord->y, $e);
+							$sudoku->solve_one;
+							unless (@{$sudoku->blank_coord}) {
 								$solved = 1;
 							}
 						};
 						if ($@) {
 							$exclude->{$coord->x}{$coord->y}{$e} = 1;
 						} elsif ($solved) {
-							return $clone;
+							return $sudoku;
 						}
 					}
 				}
