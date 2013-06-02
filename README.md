@@ -1,6 +1,9 @@
 # 簡易数独解析ツール
 
-## Sample Usage
+## Commandline Usage
 
     $ sudoku-solver.pl sample.txt
 
+## Server Usage
+
+    $ plackup app.psgi
