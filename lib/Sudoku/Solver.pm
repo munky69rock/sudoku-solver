@@ -5,6 +5,7 @@ use warnings;
 
 use base q(Sudoku);
 use List::MoreUtils qw(uniq);
+use Data::Dump qw(dump);
 
 my $exclude = {};
 
@@ -42,8 +43,8 @@ sub solve_one {
 
 sub solve {
 	my $self = shift;
+	my $i = 0;
 	for my $n (1 .. $Sudoku::COLUMN_NUM) {
-		my $i = 0;
 		for my $coord (@{$self->blank_coord}) {
 			my $exp = $self->expected_values($coord);
 			if (@$exp == $n) {
@@ -59,12 +60,15 @@ sub solve {
 					};
 					if ($@) {
 						$exclude->{$coord->x}{$coord->y}{$e} = 1;
+						dump $exclude;
 					} elsif ($solved) {
 						return $sudoku;
 					}
 				}
 			}
 		}
+		$i++;
+		print "$i\n";
 	}
 }
 
@@ -75,6 +79,7 @@ sub expected_values {
 		@{$self->vertical_values($basis_coord->x)},
 		@{$self->horizontal_values($basis_coord->y)},
 		@{$self->block_values($basis_coord->x, $basis_coord->y)},
+		$exclude->{$basis_coord->x} && $exclude->{$basis_coord->x}{$basis_coord->y} ? keys %{$exclude->{$basis_coord->x}{$basis_coord->y}} : (),
 	);
 	return [
 		grep { !exists $used{$_} } (1 .. $Sudoku::COLUMN_NUM)

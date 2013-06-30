@@ -2,8 +2,8 @@
 
 ## Commandline Usage
 
-    $ sudoku-solver.pl sample.txt
+    $ perl bin/sudoku-solver.pl sample.txt
 
 ## Server Usage
 
-    $ plackup app.psgi
+    $ plackup app/app.psgi

@@ -12,7 +12,7 @@ use Plack::Request;
 use Data::Dump qw(dump);
 
 my $base_dir; BEGIN { $base_dir = path(__FILE__)->absolute->dirname }
-use lib File::Spec->catdir($base_dir, 'lib');
+use lib File::Spec->catdir($base_dir, '..', 'lib');
 
 use Sudoku;
 use Sudoku::Solver;
@@ -63,7 +63,7 @@ my $app = sub {
 };
 
 sub create_default_data {
-	Sudoku->new( file => File::Spec->catfile($base_dir, 'sample.txt'));
+	Sudoku->new( file => File::Spec->catfile($base_dir, '..', 'sample', 'sample.txt'));
 }
 
 sub create_template { <<HTML }
@@ -74,6 +74,7 @@ sub create_template { <<HTML }
   <title>SUDOKU SOLVER</title>
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
   <style type="text/css">
     body {
       padding-top: 40px;
@@ -139,6 +140,7 @@ sub create_template { <<HTML }
       </div>
 	  <div style="text-align: center;">
 		<button class="btn btn-large btn-primary" type="submit">Solve!</button>
+		<button class="btn btn-large" onclick="\$('input[type=number]').val(0);return false;">Reset</button>
 		<input type="hidden" name="exec" value="1"/>
 	  </div>
     </form>

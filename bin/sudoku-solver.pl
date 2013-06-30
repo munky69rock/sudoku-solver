@@ -6,7 +6,7 @@ use warnings;
 use Path::Tiny;
 use File::Spec;
 
-use lib File::Spec->catdir( path(__FILE__)->absolute->dirname, 'lib' );
+use lib File::Spec->catdir( path(__FILE__)->absolute->dirname, '..', 'lib' );
 use Sudoku;
 use Sudoku::Solver;
 
